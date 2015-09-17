@@ -4,7 +4,7 @@
     <title>Rushi: Shotgun App</title>
 
     <script type="text/javascript" charset="utf-8"></script>
-    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0">
     <script src="cordova.js"></script>
     <style type="text/css">
     .unloaded{
@@ -53,7 +53,7 @@
     function startWatch() {
 
         // Update acceleration every 400 milli seconds
-        var options = { frequency: 400 };
+        var options = { frequency: 1500 };
 
         watchID = navigator.accelerometer.watchAcceleration(onAccelSuccess, onAccelError, options);
     }
@@ -82,21 +82,21 @@
                 unloaded=false;
                 halfloaded = true;
                 readyToFire = false;
-                //playMedia('cocked');
+                playMedia('cocked');
                 img.src = 'img/halfcocked.png';
                 return;
             }else if(halfloaded){
                 unloaded=false;
                 halfloaded = false;
                 readyToFire = true;
-                //playMedia('cocked');
+                playMedia('cocked');
                 img.src = 'img/readytofire.png';
                 return;
             }else if(readyToFire){
                 unloaded=true;
                 halfloaded = false;
                 readyToFire = false;
-                //playMedia('fire');
+                playMedia('fire');
                 img.src = 'img/unloaded.png';
                 return;
             }
@@ -122,6 +122,12 @@
     //
     function onAccelError() {
         alert('Failed to get the acceleration!');
+    }
+
+    function getPhoneGapPath() {
+        var path = window.location.pathname;
+        path = path.substr( path, path.length - 10 );
+        return 'file://' + path;
     }
 
     </script>
