@@ -27,8 +27,6 @@
     // The watch id references the current `watchAcceleration`
     var watchID = null;
     var prevVal=0;
-    var windowWidth;
-    var windowHeight;
     var unloaded=true,halfloaded=false,readyToFire=false;
     var img = document.getElementById('shotGun');
     img.src = 'img/unloaded.png';
@@ -41,11 +39,7 @@
     // device APIs are available
     //
     function onDeviceReady() {
-        windowWidth = $(window).width();
-        windowHeight = $(window).height();
-        document.getElementById('accel').innerHTML=windowWidth+'--'+windowHeight;
-        img.width=windowWidth-50;
-        img.height = windowHeight-50;
+        document.getElementById('accel').innerHTML='device Ready';
         startWatch();
     }
 
