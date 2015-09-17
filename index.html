@@ -18,7 +18,7 @@
     </style>
   </head>
   <body>
-  <div id="accel"></div>
+    <div id="accel"></div>
     <div><img id="shotGun" src=""/></div>
   </body>
   <script type="text/javascript" charset="utf-8">
@@ -26,7 +26,7 @@
     // The watch id references the current `watchAcceleration`
     var watchID = null;
     var prevVal=0;
-    var unloaded=false,halfloaded=false,readyToFire=false;
+    var unloaded=true,halfloaded=false,readyToFire=false;
     var img = document.getElementById('shotGun');
     img.src = 'img/unloaded.png';
 
@@ -63,9 +63,9 @@
     // onSuccess: Get a snapshot of the current acceleration
     //
     function onAccelSuccess(acceleration) {
-        var x = (acceleration.x).toFixed();
-        var y = (acceleration.y).toFixed();
-        var z = (acceleration.z).toFixed();
+        var x = +(acceleration.x).toFixed();
+        var y = +(acceleration.y).toFixed();
+        var z = +(acceleration.z).toFixed();
         var val = Math.sqrt(x*x+y*y+z*z);
         document.getElementById('accel').innerHTML = Math.abs(val-prevVal);
         if(Math.abs(val-prevVal)>1){
