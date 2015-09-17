@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Rushi: Demo Acceleration Example</title>
+    <title>Rushi: Shotgun App</title>
 
     <script type="text/javascript" charset="utf-8"></script>
-    <script src="cordova.js"></script>
+    <!-- <script src="cordova.js"></script> -->
     <style type="text/css">
     .unloaded{
         background: url(img/unloaded.png);
@@ -17,7 +17,9 @@
     }
     </style>
   </head>
-  <body background="">
+  <body>
+  <div id="accel"></div>
+    <div><img id="shotGun" src=""/></div>
   </body>
   <script type="text/javascript" charset="utf-8">
 
@@ -25,8 +27,8 @@
     var watchID = null;
     var prevVal=0;
     var unloaded=false,halfloaded=false,readyToFire=false;
-    var body = document.getElementsByTagName('body')[0];
-    body.style.backgroundImage = 'url(img/unloaded.png)';
+    var img = document.getElementById('shotGun');
+    img.src = 'img/unloaded.png';
 
     // Wait for device API libraries to load
     //
@@ -65,27 +67,28 @@
         var y = (acceleration.y).toFixed();
         var z = (acceleration.z).toFixed();
         var val = Math.sqrt(x*x+y*y+z*z);
-        if(Math.abs(val-prevVal)>2){
+        document.getElementById('accel').innerHTML = Math.abs(val-prevVal);
+        if(Math.abs(val-prevVal)>1){
             if(unloaded){
                 unloaded=false;
                 halfloaded = true;
                 readyToFire = false;
                 playMedia('cocked');
-                body.style.backgroundImage = 'url(img/halfcocked.png)';
+                img.src = 'img/halfcocked.png';
                 return;
             }else if(halfloaded){
                 unloaded=false;
                 halfloaded = false;
                 readyToFire = true;
                 playMedia('cocked');
-                body.style.backgroundImage = 'url(img/readytofire.png)';
+                img.src = 'img/readytofire.png';
                 return;
             }else if(readyToFire){
                 unloaded=true;
                 halfloaded = false;
                 readyToFire = false;
                 playMedia('fire');
-                body.style.backgroundImage = 'url(img/unloaded.png)';
+                img.src = 'img/unloaded.png';
                 return;
             }
         }
