@@ -33,7 +33,6 @@
     var windowWidth = document.body.clientWidth;
     var img = document.getElementById('shotGun');
     img.width=windowWidth-20;
-    img.height=windowHeight-20;
     img.src = 'img/unloaded.png';
 
     // Wait for device API libraries to load
@@ -52,8 +51,8 @@
     //
     function startWatch() {
 
-        // Update acceleration every 400 milli seconds
-        var options = { frequency: 1500 };
+        // Update acceleration every 200 milli seconds
+        var options = { frequency: 200 };
 
         watchID = navigator.accelerometer.watchAcceleration(onAccelSuccess, onAccelError, options);
     }
@@ -75,27 +74,28 @@
         var z = +(acceleration.z);z=z.toFixed();
         var val = Math.sqrt(x*x+y*y+z*z);
         
-        if(Math.abs(val-prevVal)>4){
+        if(Math.abs(val-prevVal)>2){
             document.getElementById('accel').innerHTML = 'rushi '+Math.abs(val-prevVal);
             prevVal=val;
             if(unloaded){
                 unloaded=false;
                 halfloaded = true;
                 readyToFire = false;
-                playMedia('cocked');
+                playMedia('fullcocked');
                 img.src = 'img/halfcocked.png';
                 return;
             }else if(halfloaded){
                 unloaded=false;
                 halfloaded = false;
                 readyToFire = true;
-                playMedia('cocked');
+                playMedia('fullcocked');
                 img.src = 'img/readytofire.png';
                 return;
             }else if(readyToFire){
                 unloaded=true;
                 halfloaded = false;
                 readyToFire = false;
+                navigator.notification.vibrate(1500);
                 playMedia('fire');
                 img.src = 'img/unloaded.png';
                 return;
