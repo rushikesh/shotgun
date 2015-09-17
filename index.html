@@ -19,8 +19,6 @@
     </style>
   </head>
   <body>
-    <input type="button" onclick="playMedia('fire')" value="Sound"/>
-    <div id="accel"></div>
     <div><img id="shotGun" src=""/></div>
   </body>
   <script type="text/javascript" charset="utf-8">
@@ -32,7 +30,7 @@
     var windowHeight = document.body.clientHeight;
     var windowWidth = document.body.clientWidth;
     var img = document.getElementById('shotGun');
-    img.width=windowWidth-20;
+    img.width=windowWidth;
     img.src = 'img/unloaded.png';
 
     // Wait for device API libraries to load
@@ -73,9 +71,12 @@
         var y = +(acceleration.y);y=y.toFixed();
         var z = +(acceleration.z);z=z.toFixed();
         var val = Math.sqrt(x*x+y*y+z*z);
-        
-        if(Math.abs(val-prevVal)>2){
-            document.getElementById('accel').innerHTML = 'rushi '+Math.abs(val-prevVal);
+        if(prevVal==0){
+            prevVal=val;
+            return;
+        }
+        if(Math.abs(val-prevVal)>4){
+            //document.getElementById('accel').innerHTML = 'rushi '+Math.abs(val-prevVal);
             prevVal=val;
             if(unloaded){
                 unloaded=false;
