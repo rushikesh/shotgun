@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rushi: Demo Acceleration Example</title>
+
+    <script type="text/javascript" charset="utf-8"></script>
+    <script src="cordova.js"></script>
+    <style type="text/css">
+    .unloaded{
+        background: url(img/unloaded.png);
+    }
+    .loaded{
+        background: url(img/loaded.png);
+    }
+    .readytofire{
+        background: url(img/readytofire.png);
+    }
+    </style>
+    <script type="text/javascript" charset="utf-8">
+
+    // The watch id references the current `watchAcceleration`
+    var watchID = null;
+    var prevVal=0;
+    var unloaded=false,halfloaded=false,readyToFire=false;
+    var body = document.getElementsByTagName('body')[0];
+    body.style.backgroundImage = 'url(img/unloaded.png)';
+
+    // Wait for device API libraries to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+
+    // device APIs are available
+    //
+    function onDeviceReady() {
+        startWatch();
+    }
+
+    // Start watching the acceleration
+    //
+    function startWatch() {
+
+        // Update acceleration every 400 milli seconds
+        var options = { frequency: 400 };
+
+        watchID = navigator.accelerometer.watchAcceleration(onAccelSuccess, onAccelError, options);
+    }
+
+    // Stop watching the acceleration
+    //
+    function stopWatch() {
+        if (watchID) {
+            navigator.accelerometer.clearWatch(watchID);
+            watchID = null;
+        }
+    }
+
+    // onSuccess: Get a snapshot of the current acceleration
+    //
+    function onAccelSuccess(acceleration) {
+        var x = (acceleration.x).toFixed();
+        var y = (acceleration.y).toFixed();
+        var z = (acceleration.z).toFixed();
+        var val = Math.sqrt(x*x+y*y+z*z);
+        if(Math.abs(val-prevVal)>2){
+            if(unloaded){
+                unloaded=false;
+                halfloaded = true;
+                readyToFire = false;
+                playMedia('cocked');
+                body.style.backgroundImage = 'url(img/halfcocked.png)';
+                return;
+            }else if(halfloaded){
+                unloaded=false;
+                halfloaded = false;
+                readyToFire = true;
+                playMedia('cocked');
+                body.style.backgroundImage = 'url(img/readytofire.png)';
+                return;
+            }else if(readyToFire){
+                unloaded=true;
+                halfloaded = false;
+                readyToFire = false;
+                playMedia('fire');
+                body.style.backgroundImage = 'url(img/unloaded.png)';
+                return;
+            }
+        }
+                              
+    }
+
+
+    function playMedia(soundEffect){
+        var my_media = new Media(getPhoneGapPath()+'audio/'+soundEffect+'.mp3', onAudioSuccess, onAudioError);
+        my_media.play();  
+    }
+
+    function onAudioSuccess() {
+        console.log("playAudio():Audio Success");
+    }
+
+    function onAudioError() {
+        alert("playAudio():Audio Failure");
+    }
+
+    // onError: Failed to get the acceleration
+    //
+    function onAccelError() {
+        alert('Failed to get the acceleration!');
+    }
+
+    </script>
+  </head>
+  <body background="">
+  </body>
+</html>
