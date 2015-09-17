@@ -4,6 +4,7 @@
     <title>Rushi: Shotgun App</title>
 
     <script type="text/javascript" charset="utf-8"></script>
+    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0">
     <script src="cordova.js"></script>
     <style type="text/css">
     .unloaded{
@@ -42,6 +43,7 @@
     function onDeviceReady() {
         windowWidth = $(window).width();
         windowHeight = $(window).height();
+        document.getElementById('accel').innerHTML=windowWidth+'--'+windowHeight;
         img.width=windowWidth-50;
         img.height = windowHeight-50;
         startWatch();
@@ -69,13 +71,13 @@
     // onSuccess: Get a snapshot of the current acceleration
     //
     function onAccelSuccess(acceleration) {
-        alert('accelsuccess');
         var x = +(acceleration.x);x=x.toFixed();
         var y = +(acceleration.y);y=y.toFixed();
         var z = +(acceleration.z);z=z.toFixed();
         var val = Math.sqrt(x*x+y*y+z*z);
         document.getElementById('accel').innerHTML = Math.abs(val-prevVal);
         if(Math.abs(val-prevVal)>1){
+            prevVal=val;
             if(unloaded){
                 unloaded=false;
                 halfloaded = true;
