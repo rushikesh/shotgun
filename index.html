@@ -19,6 +19,7 @@
     </style>
   </head>
   <body>
+    <input type="button" onclick="playMedia('fire')" value="Sound"/>
     <div id="accel"></div>
     <div><img id="shotGun" src=""/></div>
   </body>
@@ -28,7 +29,11 @@
     var watchID = null;
     var prevVal=0;
     var unloaded=true,halfloaded=false,readyToFire=false;
+    var windowHeight = document.body.clientHeight;
+    var windowWidth = document.body.clientWidth;
     var img = document.getElementById('shotGun');
+    img.width=windowWidth-20;
+    img.height=windowHeight-20;
     img.src = 'img/unloaded.png';
 
     // Wait for device API libraries to load
@@ -69,28 +74,29 @@
         var y = +(acceleration.y);y=y.toFixed();
         var z = +(acceleration.z);z=z.toFixed();
         var val = Math.sqrt(x*x+y*y+z*z);
-        document.getElementById('accel').innerHTML = Math.abs(val-prevVal);
-        if(Math.abs(val-prevVal)>1){
+        
+        if(Math.abs(val-prevVal)>4){
+            document.getElementById('accel').innerHTML = 'rushi '+Math.abs(val-prevVal);
             prevVal=val;
             if(unloaded){
                 unloaded=false;
                 halfloaded = true;
                 readyToFire = false;
-                playMedia('cocked');
+                //playMedia('cocked');
                 img.src = 'img/halfcocked.png';
                 return;
             }else if(halfloaded){
                 unloaded=false;
                 halfloaded = false;
                 readyToFire = true;
-                playMedia('cocked');
+                //playMedia('cocked');
                 img.src = 'img/readytofire.png';
                 return;
             }else if(readyToFire){
                 unloaded=true;
                 halfloaded = false;
                 readyToFire = false;
-                playMedia('fire');
+                //playMedia('fire');
                 img.src = 'img/unloaded.png';
                 return;
             }
